@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Profile, Strategy } from "passport-discord";
 import { VerifyCallback } from "passport-oauth2";
-
+import { User } from "../data-base/schemas";
 passport.use(
   new Strategy(
     {
@@ -18,6 +18,29 @@ passport.use(
     ) => {
       console.log(accessToken, refreshToken);
       console.log(profile);
+      const { id: discordId } = profile;
+
+      try {
+        const existingUser = await User.findOneAndUpdate(
+          { discordId },
+          { accessToken, refreshToken },
+          { new: true }
+        );
+        if (existingUser) return done(null, existingUser);
+
+        const newUser = new User({
+          discordId,
+          accessToken,
+          refreshToken,
+        });
+
+        const saveduser = await newUser.save();
+
+        return done(null, saveduser);
+      } catch (error) {
+        console.log(error);
+        return done(error as any, undefined);
+      }
     }
   )
 );

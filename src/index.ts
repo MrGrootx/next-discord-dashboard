@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 import createApp from "./utils/createApp";
+import './data-base'
 
 async function main() {
   console.log(`Running in ${process.env.ENVIROMENT} mode.`);
