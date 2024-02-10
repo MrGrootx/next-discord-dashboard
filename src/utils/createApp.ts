@@ -6,6 +6,8 @@ import session from "express-session";
 import passport from "passport";
 
 import routes from "../routes";
+import store from "connect-mongo";
+
 config();
 require("../strategies/discord");
 
@@ -24,6 +26,9 @@ function createApp(): Express {
     })
   );
 
+  // Enable Sessions
+
+
   app.use(
     session({
       secret: "ALDHKLWHDUWHDUWHDUAWDAHW",
@@ -32,6 +37,7 @@ function createApp(): Express {
       cookie: {
         maxAge: 60000 * 60 * 24 * 7,
       },
+      store: store.create({ mongoUrl: process.env.MONGO_URI }),
     })
   );
 
