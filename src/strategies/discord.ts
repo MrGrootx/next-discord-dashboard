@@ -13,10 +13,11 @@ passport.use(
     async (
       accessToken: string,
       refreshToken: string,
-      prefix: Profile,
+      profile: Profile,
       done: VerifyCallback
     ) => {
-      console.log();
+      console.log(accessToken, refreshToken);
+      console.log(profile);
     }
   )
 );

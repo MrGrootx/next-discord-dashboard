@@ -1,10 +1,12 @@
+import { config } from "dotenv";
+
 import express, { Express } from "express";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 
 import routes from "../routes";
-
+config();
 require("../strategies/discord");
 
 function createApp(): Express {
