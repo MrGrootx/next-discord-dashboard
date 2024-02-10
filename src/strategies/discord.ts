@@ -2,6 +2,23 @@ import passport from "passport";
 import { Profile, Strategy } from "passport-discord";
 import { VerifyCallback } from "passport-oauth2";
 import { User } from "../data-base/schemas";
+
+
+passport.serializeUser((user: any, done) => {
+  return done(null, user.id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const user = await User.findById(id);
+    return user ? done(null, user) : done(null, null);
+  } catch (error) {
+    console.log(error);
+    return done(error, null);
+  }
+});
+
+
 passport.use(
   new Strategy(
     {
@@ -14,7 +31,7 @@ passport.use(
       accessToken: string,
       refreshToken: string,
       profile: Profile,
-      done: VerifyCallback
+      done
     ) => {
       console.log(accessToken, refreshToken);
       console.log(profile);
